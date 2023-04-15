@@ -1,17 +1,18 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
+    [SerializeField] float mainThrust = 1000f;
+    [SerializeField]  float rotationThrust = 100f;
+    [SerializeField] AudioClip mainEngine;
+
+    AudioSource audioSource;
     Rigidbody objectRigidBody;
-    [SerializeField] float mainThrust = 200f;
-    [SerializeField] float rotationThrust = 100f;
 
     void Start()
     {
         objectRigidBody =  GetComponent<Rigidbody>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -25,7 +26,14 @@ public class Movement : MonoBehaviour
         if (Input.GetKey(KeyCode.Space))
         {
             objectRigidBody.AddRelativeForce(Vector3.up * Time.deltaTime * mainThrust);
-        } 
+            if (!audioSource.isPlaying)
+            {
+                audioSource.PlayOneShot(mainEngine);
+            }
+            return;
+        }
+
+        audioSource.Stop();
     }
 
     void ProcessRotation()
