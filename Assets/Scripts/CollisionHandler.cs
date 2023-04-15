@@ -1,4 +1,3 @@
-using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -6,6 +5,10 @@ public class CollisionHandler : MonoBehaviour
 {
     [SerializeField] AudioClip sucess;
     [SerializeField] AudioClip crash;
+
+    [SerializeField] ParticleSystem sucessParticles;
+    [SerializeField] ParticleSystem crashParticles;
+
     AudioSource audioSource;
 
     bool isTransitioning = false;
@@ -29,8 +32,6 @@ public class CollisionHandler : MonoBehaviour
             case "Finish":
                 StartSuccessSequence();
                 break;
-            case "Fuel":
-                break;
             default:
                 StartCrashSequence();  
                 break;
@@ -40,6 +41,7 @@ public class CollisionHandler : MonoBehaviour
     void StartSuccessSequence()
     {
         isTransitioning = true;
+        sucessParticles.Play();
         audioSource.Stop();
         audioSource.PlayOneShot(sucess);
         GetComponent<Movement>().enabled = false;
@@ -49,6 +51,7 @@ public class CollisionHandler : MonoBehaviour
     void StartCrashSequence()
     {
         isTransitioning = true;
+        crashParticles.Play();
         audioSource.Stop();
         audioSource.PlayOneShot(crash);
         GetComponent<Movement>().enabled = false;
